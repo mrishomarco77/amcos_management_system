@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # AMCOS Management System
 
 An Agricultural Marketing Co-operative Society (AMCOS) Management System that helps manage farmers, crops, purchases, sales, and payments.
@@ -96,3 +97,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Support
 
 For support, please email [your-email@example.com] 
+=======
+# amcos_management_system
+amcos_management_system
+>>>>>>> 11e58783120a7448c1cdd344d84358256b847444
