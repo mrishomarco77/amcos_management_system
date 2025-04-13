@@ -1,0 +1,61 @@
+# IDE and Editor files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# System Files
+.DS_Store
+Thumbs.db
+
+# Configuration Files
+admin/includes/config.php
+admin/includes/db_connect.php
+
+# Dependency directories
+vendor/
+node_modules/
+
+# Logs and databases
+*.log
+*.sql
+*.sqlite
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*~
+
+# Uploaded files and media
+uploads/
+media/
+
+# Cache and session files
+tmp/
+temp/
+cache/
+sessions/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Compiled files
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+
+# Packages
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip 

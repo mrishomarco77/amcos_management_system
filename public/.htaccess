@@ -1,0 +1,29 @@
+RewriteEngine On
+
+# Handle admin routes
+RewriteRule ^admin/(.*)$ admin/$1 [L]
+
+# Handle public routes
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
+
+# PHP error handling
+php_flag display_errors on
+php_value error_reporting E_ALL
+
+# Directory security
+Options -Indexes
+
+# Allow access to the directory
+<IfModule mod_authz_core.c>
+    Require all granted
+</IfModule>
+
+# Ensure PHP files are processed
+<IfModule mod_mime.c>
+    AddType application/x-httpd-php .php
+</IfModule>
+
+# Optional: Set the default file to load (e.g., login.php)
+DirectoryIndex login.php
