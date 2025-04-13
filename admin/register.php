@@ -44,7 +44,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     
                     if (mysqli_stmt_execute($stmt)) {
                         $msg = "Admin registered successfully. You can now login.";
-                        // Redirect to login page after 3 seconds
                         echo "<script>
                             alert('Registration successful! Redirecting to login page...');
                             window.location.href = 'index.php';
@@ -78,19 +77,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             display: flex;
             align-items: center;
             justify-content: center;
+            margin: 0;
         }
         .registration-card {
             background: white;
             border-radius: 10px;
             padding: 2rem;
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
             width: 100%;
             max-width: 500px;
         }
         .form-title {
             color: #28a745;
             text-align: center;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
             font-weight: bold;
         }
         .form-control {
@@ -123,81 +123,67 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             text-align: center;
             margin-top: 1rem;
         }
+        .login-link a {
+            color: #28a745;
+            text-decoration: none;
+        }
+        .login-link a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="registration-card">
-            <h2 class="form-title">Admin Registration</h2>
-            
-            <?php if($error) { ?>
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <?php echo $error; ?>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            <?php } ?>
-            
-            <?php if($msg) { ?>
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <?php echo $msg; ?>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            <?php } ?>
-
-            <form method="POST" action="" onsubmit="return validateForm()">
-                <div class="input-group mb-3">
-                    <span class="input-group-text"><i class="fas fa-user"></i></span>
-                    <input type="text" class="form-control" name="fullname" id="fullname" placeholder="Full Name" required>
-                </div>
-
-                <div class="input-group mb-3">
-                    <span class="input-group-text"><i class="fas fa-user-shield"></i></span>
-                    <input type="text" class="form-control" name="username" id="username" placeholder="Username" required>
-                </div>
-
-                <div class="input-group mb-3">
-                    <span class="input-group-text"><i class="fas fa-envelope"></i></span>
-                    <input type="email" class="form-control" name="email" id="email" placeholder="Email Address" required>
-                </div>
-
-                <div class="input-group mb-3">
-                    <span class="input-group-text"><i class="fas fa-lock"></i></span>
-                    <input type="password" class="form-control" name="password" id="password" placeholder="Password" required>
-                </div>
-
-                <div class="input-group mb-3">
-                    <span class="input-group-text"><i class="fas fa-lock"></i></span>
-                    <input type="password" class="form-control" name="confirm_password" id="confirm_password" placeholder="Confirm Password" required>
-                </div>
-
-                <button type="submit" class="btn btn-register w-100 text-white">Register</button>
-            </form>
-
-            <div class="login-link">
-                <p>Already have an account? <a href="index.php">Login here</a></p>
+    <div class="registration-card">
+        <h2 class="form-title">Admin Registration</h2>
+        
+        <?php if ($error): ?>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <?php echo $error; ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
+        <?php endif; ?>
+        
+        <?php if ($msg): ?>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <?php echo $msg; ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <?php endif; ?>
+
+        <form method="POST" action="">
+            <div class="input-group mb-3">
+                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                <input type="text" class="form-control" name="fullname" placeholder="Full Name" required>
+            </div>
+
+            <div class="input-group mb-3">
+                <span class="input-group-text"><i class="fas fa-user-shield"></i></span>
+                <input type="text" class="form-control" name="username" placeholder="Username" required>
+            </div>
+
+            <div class="input-group mb-3">
+                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                <input type="email" class="form-control" name="email" placeholder="Email Address" required>
+            </div>
+
+            <div class="input-group mb-3">
+                <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                <input type="password" class="form-control" name="password" placeholder="Password" required>
+            </div>
+
+            <div class="input-group mb-3">
+                <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                <input type="password" class="form-control" name="confirm_password" placeholder="Confirm Password" required>
+            </div>
+
+            <button type="submit" class="btn btn-register w-100 text-white">Register</button>
+        </form>
+
+        <div class="login-link">
+            <p>Already have an account? <a href="index.php">Login here</a></p>
         </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        function validateForm() {
-            const password = document.getElementById('password').value;
-            const confirm_password = document.getElementById('confirm_password').value;
-            
-            if (password !== confirm_password) {
-                alert("Passwords do not match!");
-                return false;
-            }
-            
-            if (password.length < 6) {
-                alert("Password must be at least 6 characters long!");
-                return false;
-            }
-            
-            return true;
-        }
-    </script>
 </body>
 </html>
