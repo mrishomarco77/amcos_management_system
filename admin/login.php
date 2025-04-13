@@ -14,32 +14,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = trim($_POST['username']);
     $password = $_POST['password'];
     
-    // Prepare SQL statement to prevent SQL injection
-    $stmt = $conn->prepare("SELECT id, username, password, fullname FROM admin WHERE username = ? AND status = 'active' LIMIT 1");
-    $stmt->bind_param("s", $username);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    
-    if ($result->num_rows > 0) {
-        $admin = $result->fetch_assoc();
-        // Verify password
-        if (password_verify($password, $admin['password'])) {
-            // Password is correct, create session
-            $_SESSION['admin_id'] = $admin['id'];
-            $_SESSION['admin_username'] = $admin['username'];
-            $_SESSION['admin_fullname'] = $admin['fullname'];
-            
-            // Redirect to dashboard
-            header("Location: dashboard.php");
-            exit();
+    try {
+        // Prepare SQL statement to prevent SQL injection
+        $stmt = $connection->prepare("SELECT id, username, password, fullname FROM admin WHERE username = ? AND status = 'active' LIMIT 1");
+        $stmt->execute([$username]);
+        $admin = $stmt->fetch();
+        
+        if ($admin) {
+            // Verify password
+            if (password_verify($password, $admin['password'])) {
+                // Password is correct, create session
+                $_SESSION['admin_id'] = $admin['id'];
+                $_SESSION['admin_username'] = $admin['username'];
+                $_SESSION['admin_fullname'] = $admin['fullname'];
+                
+                // Redirect to dashboard
+                header("Location: dashboard.php");
+                exit();
+            } else {
+                $error = "Invalid username or password";
+            }
         } else {
             $error = "Invalid username or password";
         }
-    } else {
-        $error = "Invalid username or password";
+    } catch (PDOException $e) {
+        error_log("Login error: " . $e->getMessage());
+        $error = "System error. Please try again later.";
     }
-    
-    $stmt->close();
 }
 ?>
 <!DOCTYPE html>
@@ -114,7 +115,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         
         <?php if (!empty($error)): ?>
             <div class="error-message">
-                <?php echo $error; ?>
+                <?php echo htmlspecialchars($error); ?>
             </div>
         <?php endif; ?>
         

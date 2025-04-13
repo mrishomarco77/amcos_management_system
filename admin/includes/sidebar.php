@@ -4,12 +4,14 @@ require_once 'db_connect.php';
 
 // Get admin details from session
 $admin_id = $_SESSION['admin_id'];
-$stmt = $conn->prepare("SELECT fullname FROM admin WHERE id = ?");
-$stmt->bind_param("i", $admin_id);
-$stmt->execute();
-$result = $stmt->get_result();
-$admin_data = $result->fetch_assoc();
-$stmt->close();
+try {
+    $stmt = $connection->prepare("SELECT fullname FROM admin WHERE id = ?");
+    $stmt->execute([$admin_id]);
+    $admin_data = $stmt->fetch();
+} catch (PDOException $e) {
+    error_log("Error fetching admin details: " . $e->getMessage());
+    $admin_data = ['fullname' => 'Admin'];
+}
 ?>
 
 <div class="sidebar">
@@ -87,162 +89,162 @@ $stmt->close();
 <style>
     .sidebar {
         position: fixed;
-    top: 0;
+        top: 0;
         left: 0;
-    height: 100%;
-    width: 250px;
-    background: #2c3e50;
-    color: #fff;
-    z-index: 1000;
-    padding-top: 20px;
-    transition: all 0.3s ease;
-    overflow-x: hidden;
-}
-
-body.sidebar-collapsed .sidebar {
-    width: 70px;
-}
-
-.brand-name {
-    display: block;
-}
-
-.brand-icon {
-    display: none;
-}
-
-body.sidebar-collapsed .brand-name {
-    display: none;
-}
-
-body.sidebar-collapsed .brand-icon {
-    display: block;
-}
-
-body.sidebar-collapsed .profile-section,
-body.sidebar-collapsed .nav-text {
-    opacity: 0;
-    visibility: hidden;
-}
-
-body.sidebar-collapsed .nav-item i {
-    margin-right: 0;
-}
-
-.sidebar-header {
-    padding: 1rem;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
-}
-
-.app-brand {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #fff;
-    text-decoration: none;
-    text-align: center;
-    margin-bottom: 1rem;
-    transition: all 0.3s ease;
-}
-
-.profile-section {
-    text-align: center;
-    padding: 1rem 0;
-    transition: all 0.3s ease;
-}
-
-.profile-info .avatar img {
-    border: 3px solid rgba(255,255,255,0.2);
-    transition: all 0.3s ease;
-}
-
-.sidebar-body {
-    padding: 1rem 0;
-}
-
-.nav-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.nav-item {
-    margin-bottom: 0.5rem;
-}
-
-.nav-item a {
-    display: flex;
-    align-items: center;
-    padding: 0.75rem 1.5rem;
-    color: rgba(255,255,255,0.8);
-    text-decoration: none;
-    transition: all 0.3s ease;
-    white-space: nowrap;
-    position: relative;
-}
-
-.nav-item a:hover {
-    color: #fff;
-    background: rgba(255,255,255,0.1);
-}
-
-.nav-item.active a {
-    color: #fff;
-    background: rgba(255,255,255,0.1);
-}
-
-.nav-item i {
-    width: 20px;
-    margin-right: 10px;
-    text-align: center;
-    font-size: 1.1rem;
-    transition: all 0.3s ease;
-}
-
-body.sidebar-collapsed .nav-item a {
-    justify-content: center;
-    padding: 0.75rem;
-}
-
-body.sidebar-collapsed .nav-item a:hover::after {
-    content: attr(title);
-    position: absolute;
-    left: 100%;
-    top: 50%;
-    transform: translateY(-50%);
-    background: #2c3e50;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    margin-left: 10px;
-    font-size: 0.875rem;
-    white-space: nowrap;
-    z-index: 1001;
-}
-
-@media (max-width: 768px) {
-    .sidebar {
-        margin-left: -250px;
-    }
-    body.sidebar-collapsed .sidebar {
-        margin-left: 0;
+        height: 100%;
         width: 250px;
+        background: #2c3e50;
+        color: #fff;
+        z-index: 1000;
+        padding-top: 20px;
+        transition: all 0.3s ease;
+        overflow-x: hidden;
     }
-    body.sidebar-collapsed .brand-name {
+
+    body.sidebar-collapsed .sidebar {
+        width: 70px;
+    }
+
+    .brand-name {
         display: block;
     }
-    body.sidebar-collapsed .brand-icon {
+
+    .brand-icon {
         display: none;
     }
+
+    body.sidebar-collapsed .brand-name {
+        display: none;
+    }
+
+    body.sidebar-collapsed .brand-icon {
+        display: block;
+    }
+
     body.sidebar-collapsed .profile-section,
     body.sidebar-collapsed .nav-text {
-        opacity: 1;
-        visibility: visible;
+        opacity: 0;
+        visibility: hidden;
     }
+
     body.sidebar-collapsed .nav-item i {
-        margin-right: 10px;
+        margin-right: 0;
     }
-    body.sidebar-collapsed .nav-item a {
-        justify-content: flex-start;
+
+    .sidebar-header {
+        padding: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .app-brand {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #fff;
+        text-decoration: none;
+        text-align: center;
+        margin-bottom: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .profile-section {
+        text-align: center;
+        padding: 1rem 0;
+        transition: all 0.3s ease;
+    }
+
+    .profile-info .avatar img {
+        border: 3px solid rgba(255,255,255,0.2);
+        transition: all 0.3s ease;
+    }
+
+    .sidebar-body {
+        padding: 1rem 0;
+    }
+
+    .nav-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .nav-item {
+        margin-bottom: 0.5rem;
+    }
+
+    .nav-item a {
+        display: flex;
+        align-items: center;
         padding: 0.75rem 1.5rem;
+        color: rgba(255,255,255,0.8);
+        text-decoration: none;
+        transition: all 0.3s ease;
+        white-space: nowrap;
+        position: relative;
+    }
+
+    .nav-item a:hover {
+        color: #fff;
+        background: rgba(255,255,255,0.1);
+    }
+
+    .nav-item.active a {
+        color: #fff;
+        background: rgba(255,255,255,0.1);
+    }
+
+    .nav-item i {
+        width: 20px;
+        margin-right: 10px;
+        text-align: center;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+    }
+
+    body.sidebar-collapsed .nav-item a {
+        justify-content: center;
+        padding: 0.75rem;
+    }
+
+    body.sidebar-collapsed .nav-item a:hover::after {
+        content: attr(title);
+        position: absolute;
+        left: 100%;
+        top: 50%;
+        transform: translateY(-50%);
+        background: #2c3e50;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        margin-left: 10px;
+        font-size: 0.875rem;
+        white-space: nowrap;
+        z-index: 1001;
+    }
+
+    @media (max-width: 768px) {
+        .sidebar {
+            margin-left: -250px;
+        }
+        body.sidebar-collapsed .sidebar {
+            margin-left: 0;
+            width: 250px;
+        }
+        body.sidebar-collapsed .brand-name {
+            display: block;
+        }
+        body.sidebar-collapsed .brand-icon {
+            display: none;
+        }
+        body.sidebar-collapsed .profile-section,
+        body.sidebar-collapsed .nav-text {
+            opacity: 1;
+            visibility: visible;
+        }
+        body.sidebar-collapsed .nav-item i {
+            margin-right: 10px;
+        }
+        body.sidebar-collapsed .nav-item a {
+            justify-content: flex-start;
+            padding: 0.75rem 1.5rem;
         }
     }
 </style>
