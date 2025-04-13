@@ -85,10 +85,10 @@ $stmt->close();
 </div>
 
 <style>
-.sidebar {
-    position: fixed;
+    .sidebar {
+        position: fixed;
     top: 0;
-    left: 0;
+        left: 0;
     height: 100%;
     width: 250px;
     background: #2c3e50;
@@ -243,8 +243,8 @@ body.sidebar-collapsed .nav-item a:hover::after {
     body.sidebar-collapsed .nav-item a {
         justify-content: flex-start;
         padding: 0.75rem 1.5rem;
+        }
     }
-}
 </style>
 
 <script>
